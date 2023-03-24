@@ -1,4 +1,4 @@
-<h3> English version of this text more above. </h3>
+<h2> English version of this text more above. </h2>
 
 O aplicativo está na pasta, é o "File Organizer.exe" e ainda não possui um ícone.
 
