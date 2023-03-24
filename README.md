@@ -1,4 +1,4 @@
-<h1> English version of this text more above. </h1>
+<h3> English version of this text more above. </h3>
 
 O aplicativo está na pasta, é o "File Organizer.exe" e ainda não possui um ícone.
 
@@ -23,10 +23,7 @@ x = fecha o programa
 setinhas = move a imagem para a próxima ou anterior
 
 
-////////////////////////////////
-
-
-EM INGLÊS / IN ENGLISH
+<h2> EM INGLÊS / IN ENGLISH </h2>
 
 The app is in the folder, it is "File Organizer.exe", It doesn't have an icon yet.
 
