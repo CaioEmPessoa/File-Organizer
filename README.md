@@ -22,6 +22,8 @@ Não se assuste caso fechar o programa na página "Bem Vindo" (a primeira) e ele
 x = fecha o programa
 setinhas = move a imagem para a próxima ou anterior
 
+<br>
+<br>
 
 <h2> EM INGLÊS / IN ENGLISH </h2>
 
