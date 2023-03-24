@@ -7,7 +7,7 @@ Não se assuste caso fechar o programa na página "Bem Vindo" (a primeira) e ele
 - Escolha uma pasta para começar, ela precisa ter imagens dentro dela, caso contrário, ele mostrará um erro.
 - Ele salvará este caminho e outros caminhos que você escolher depois nessa página inicial, mas se quiser, pode excluir essas pastas no botão inferior.
 
-Funções:
+<h3> Funções: </h3>
 - No primeiro "Botão" (que na verdade é uma entrada) é possivel escrever textos para renomear a foto que está na tela ou criar uma nova pasta com este nome (depende do botão que clicar).
 
 - Você pode atualizar a leitura da pasta com as imagens, caso tenha excluído uma ou criado uma nova pasta (geralmente é necessário clicar duas vezes nesse botão para as pastas aparecerem).
@@ -18,7 +18,7 @@ Funções:
 
 - Qualquer mensagem importante, como mensagens de erro ou status do que o aplicativo está fazendo, aparecerá na barra de status na parte inferior.
 
-Atalhos:
+<h3> Atalhos: </h3>
 x = fecha o programa
 setinhas = move a imagem para a próxima ou anterior
 
