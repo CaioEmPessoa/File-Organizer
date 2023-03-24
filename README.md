@@ -23,7 +23,6 @@ x = fecha o programa
 setinhas = move a imagem para a próxima ou anterior
 
 
-/////////////////////////////////////////
 EM INGLÊS / IN ENGLISH
 
 The app is in the folder, it is "File Organizer.exe", It doesn't have an icon yet.
