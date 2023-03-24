@@ -23,7 +23,7 @@ x = fecha o programa
 setinhas = move a imagem para a próxima ou anterior
 
 
-/\/\/\//\/\/\/\/\/\/\/\
+////////////////////////////////
 
 
 EM INGLÊS / IN ENGLISH
