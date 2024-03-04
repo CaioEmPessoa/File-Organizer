@@ -28,6 +28,25 @@ class MainWindow(tk.Tk):
             elif file.endswith(self.VID_EXT):
                 self.root_media.append((file, "vid"))
 
+
+    def show_media(self, media):
+        media_path = media[0]
+        media_type = media[1]
+
+        if media_type == "img":
+            self.org_image = Image.open(media_path)
+            self.image = ImageTk.PhotoImage(self.org_image)
+            self.image_label = tk.Label(master=self, image=self.image)
+            self.image_label.grid(row=0, column=0, columnspan=3, sticky="NSEW")
+        
+    def next_media(self):
+        self.media_index += 1
+        self.show_media(self.root_media[self.media_index])
+
+    def previous_media(self):
+        self.media_index -= 1
+        self.show_media(self.root_media[self.media_index])
+
     def buttons(self):
         
         previous_btn = tk.Button(master=self, text="<- previous", command=lambda: self.previous_media(),
