@@ -17,9 +17,20 @@ class MainWindow(tk.Tk):
         self.columnconfigure((0, 1, 2), weight=1)
         self.geometry("500x500")
 
+    def search_media(self):
+        self.root_files = os.listdir(self.APP_PATH)
+        self.root_media = []
+        for file in self.root_files:
+            file = f"{self.APP_PATH}/{file}"
+
+            if file.endswith(self.IMG_EXT):
+                self.root_media.append((file, "img"))
+            elif file.endswith(self.VID_EXT):
+                self.root_media.append((file, "vid"))
+
     def buttons(self):
         
-        previous_btn = tk.Button(master=self, text="<- previous",
+        previous_btn = tk.Button(master=self, text="<- previous", command=lambda: self.previous_media(),
                                  width=10)
         previous_btn.grid(row=1, column=0, padx=10, pady=10)
 
@@ -27,10 +38,12 @@ class MainWindow(tk.Tk):
                             bg="red", fg="white", width=10)
         del_btn.grid(row=1, column=1)
 
-        next_btn = tk.Button(text="next ->",
+        next_btn = tk.Button(text="next ->", command=lambda: self.next_media(), 
                              width=10)
         next_btn.grid(row=1, column=2)
 
 main = MainWindow()
 main.buttons()
+main.search_media()
+main.show_media(main.root_media[0])
 main.mainloop()
