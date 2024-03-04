@@ -19,7 +19,7 @@ Não se assuste caso fechar o programa na página "Bem Vindo" (a primeira) e ele
 - Qualquer mensagem importante, como mensagens de erro ou status do que o aplicativo está fazendo, aparecerá na barra de status na parte inferior.
 
 <h3> Atalhos: </h3>
-x = fecha o programa
+x = fecha o programa <br>
 setinhas = move a imagem para a próxima ou anterior
 
 <br>
@@ -41,5 +41,5 @@ And finally, choose one of the folders that are in the folder ( in a maximum of 
 Any important messeges, like error messeges or status of what the app is doing, will apper on the status bar at the bottom.
 
 Shortcuts:
-x = closes the program
+x = closes the program <br>
 arrowkeys = move the image to the next or previous one
