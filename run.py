@@ -27,6 +27,16 @@ class MainWindow(tk.Tk):
                 self.root_media.append((file, "img"))
             elif file.endswith(self.VID_EXT):
                 self.root_media.append((file, "vid"))
+    
+    def resize_img(self):
+        width = self.winfo_width()
+        height = self.winfo_height()
+        
+        resized_img = self.org_image.resize((width, height), Image.LANCZOS)
+        self.image = ImageTk.PhotoImage(resized_img)
+        self.image_label.config(image=self.image)
+
+        self.after(20, self.resize_img)
 
 
     def show_media(self, media):
@@ -34,10 +44,14 @@ class MainWindow(tk.Tk):
         media_type = media[1]
 
         if media_type == "img":
+
             self.org_image = Image.open(media_path)
             self.image = ImageTk.PhotoImage(self.org_image)
             self.image_label = tk.Label(master=self, image=self.image)
             self.image_label.grid(row=0, column=0, columnspan=3, sticky="NSEW")
+            
+            self.after(20, self.resize_img)
+
         
     def next_media(self):
         self.media_index += 1
@@ -48,18 +62,17 @@ class MainWindow(tk.Tk):
         self.show_media(self.root_media[self.media_index])
 
     def buttons(self):
-        
-        previous_btn = tk.Button(master=self, text="<- previous", command=lambda: self.previous_media(),
+        self.previous_btn = tk.Button(master=self, text="<- previous", command=lambda: self.previous_media(),
                                  width=10)
-        previous_btn.grid(row=1, column=0, padx=10, pady=10)
+        self.previous_btn.grid(row=1, column=0, padx=10, pady=10)
 
-        del_btn = tk.Button(master=self, text="delete", 
+        self.del_btn = tk.Button(master=self, text="delete", 
                             bg="red", fg="white", width=10)
-        del_btn.grid(row=1, column=1)
+        self.del_btn.grid(row=1, column=1)
 
-        next_btn = tk.Button(text="next ->", command=lambda: self.next_media(), 
+        self.next_btn = tk.Button(text="next ->", command=lambda: self.next_media(), 
                              width=10)
-        next_btn.grid(row=1, column=2)
+        self.next_btn.grid(row=1, column=2)
 
 main = MainWindow()
 main.buttons()
