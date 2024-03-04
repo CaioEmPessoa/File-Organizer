@@ -38,12 +38,15 @@ class MainWindow(tk.Tk):
 
         self.after(20, self.resize_img)
 
+    def play_video(self, e):
+        self.player.play()
 
     def show_media(self, media):
         media_path = media[0]
         media_type = media[1]
 
         if media_type == "img":
+            self.play_button.grid_forget()
 
             self.org_image = Image.open(media_path)
             self.image = ImageTk.PhotoImage(self.org_image)
@@ -52,6 +55,20 @@ class MainWindow(tk.Tk):
             
             self.after(20, self.resize_img)
 
+        ## TODO: extrair UM frame do video e bota ele como preview antes de dar o play que odio
+        ##       ou fazer algo completamente diferente que difici
+        elif media_type == "vid":
+            self.player = TkinterVideo(master=self, scaled=True)
+            self.player.load(media_path)
+            self.player.grid(row=0, column=0, columnspan=4, sticky="NSEW")
+            
+            self.player.play()
+            self.player.bind('<<Ended>>', self.play_video)
+            self.after(2, self.player.pause())
+
+            self.play_button.grid(row=1, column=1)
+            self.del_btn.grid(row=1, column=2)
+            self.next_btn.grid(row=1, column=3)
         
     def next_media(self):
         self.media_index += 1
@@ -65,6 +82,8 @@ class MainWindow(tk.Tk):
         self.previous_btn = tk.Button(master=self, text="<- previous", command=lambda: self.previous_media(),
                                  width=10)
         self.previous_btn.grid(row=1, column=0, padx=10, pady=10)
+
+        self.play_button = tk.Button(master=self, text="play", command=lambda: self.play_video(''), width=10)
 
         self.del_btn = tk.Button(master=self, text="delete", 
                             bg="red", fg="white", width=10)
