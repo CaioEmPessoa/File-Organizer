@@ -1,0 +1,6 @@
+distlib==0.3.8
+filelock==3.13.1
+platformdirs==4.2.0
+virtualenv==20.25.0
+virtualenvwrapper-win==1.2.7
+xmltodict==0.12.0
