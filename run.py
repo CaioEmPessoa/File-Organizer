@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkVideoPlayer import TkinterVideo
+import cv2
 import os
 
 class MainWindow(tk.Tk):
@@ -16,6 +17,7 @@ class MainWindow(tk.Tk):
         self.rowconfigure((0), weight=1)
         self.columnconfigure((0, 1, 2), weight=1)
         self.geometry("500x500")
+        self.title("File Organizer")
 
     def search_media(self):
         self.root_files = os.listdir(self.APP_PATH)
@@ -32,44 +34,62 @@ class MainWindow(tk.Tk):
         width = self.winfo_width()
         height = self.winfo_height()
         
-        resized_img = self.org_image.resize((width, height), Image.LANCZOS)
-        self.image = ImageTk.PhotoImage(resized_img)
-        self.image_label.config(image=self.image)
+        self.resized_img = self.org_image.resize((width, height), Image.LANCZOS)
+        self.image = ImageTk.PhotoImage(self.resized_img)
+        return self.image
 
-        self.after(20, self.resize_img)
+    def extract_frame(self, media):
+        cap = cv2.VideoCapture(media)
+        ret, frame = cap.read()
+        if ret:
+            return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        else:
+            return None
 
-    def play_video(self, e):
+    def video_start(self):
+        self.image_label.destroy()
+
+        self.player.load(self.media_path)
+        
+        self.player.grid(row=0, column=0, columnspan=4, sticky="NSEW")
+
+        self.player.play()
+        self.player.bind('<<Ended>>', self.play_loop)
+
+    def play_loop(self, e):
         self.player.play()
 
     def show_media(self, media):
-        media_path = media[0]
-        media_type = media[1]
+        self.media_path = media[0]
+        self.media_type = media[1]
 
-        if media_type == "img":
+        self.image_label.destroy()
+        self.player.destroy()
+
+        if self.media_type == "img":
+            self.org_image = Image.open(self.media_path)
+            span = 3
+
             self.play_button.grid_forget()
+            self.del_btn.grid(row=1, column=1)
+            self.next_btn.grid(row=1, column=2)
 
-            self.org_image = Image.open(media_path)
-            self.image = ImageTk.PhotoImage(self.org_image)
-            self.image_label = tk.Label(master=self, image=self.image)
-            self.image_label.grid(row=0, column=0, columnspan=3, sticky="NSEW")
-            
-            self.after(20, self.resize_img)
+        elif self.media_type == "vid":
+            self.vid_frame = self.extract_frame(self.media_path)
+            self.org_image = Image.fromarray(self.vid_frame)
 
-        ## TODO: extrair UM frame do video e bota ele como preview antes de dar o play que odio
-        ##       ou fazer algo completamente diferente que difici
-        elif media_type == "vid":
+            span = 4
+
             self.player = TkinterVideo(master=self, scaled=True)
-            self.player.load(media_path)
-            self.player.grid(row=0, column=0, columnspan=4, sticky="NSEW")
-            
-            self.player.play()
-            self.player.bind('<<Ended>>', self.play_video)
-            self.after(2, self.player.pause())
-
             self.play_button.grid(row=1, column=1)
             self.del_btn.grid(row=1, column=2)
             self.next_btn.grid(row=1, column=3)
-        
+
+        self.image = self.resize_img()
+
+        self.image_label = tk.Label(master=self, image=self.image)
+        self.image_label.grid(row=0, column=0, columnspan=span, sticky="NSEW")
+
     def next_media(self):
         self.media_index += 1
         self.show_media(self.root_media[self.media_index])
@@ -79,22 +99,21 @@ class MainWindow(tk.Tk):
         self.show_media(self.root_media[self.media_index])
 
     def buttons(self):
-        self.previous_btn = tk.Button(master=self, text="<- previous", command=lambda: self.previous_media(),
-                                 width=10)
+        self.image_label = tk.Label(master=self)
+        self.player = TkinterVideo(master=self, scaled=True)
+
+        self.previous_btn = tk.Button(master=self, text="<- previous", command=lambda: self.previous_media(),width=10)
         self.previous_btn.grid(row=1, column=0, padx=10, pady=10)
 
-        self.play_button = tk.Button(master=self, text="play", command=lambda: self.play_video(''), width=10)
+        self.play_button = tk.Button(master=self, text="play", command=lambda: self.video_start(), width=10)
 
-        self.del_btn = tk.Button(master=self, text="delete", 
-                            bg="red", fg="white", width=10)
-        self.del_btn.grid(row=1, column=1)
+        self.del_btn = tk.Button(master=self, text="delete", bg="red", fg="white", width=10)
 
-        self.next_btn = tk.Button(text="next ->", command=lambda: self.next_media(), 
-                             width=10)
-        self.next_btn.grid(row=1, column=2)
+        self.next_btn = tk.Button(text="next ->", command=lambda: self.next_media(), width=10)
 
 main = MainWindow()
 main.buttons()
 main.search_media()
+main.update()
 main.show_media(main.root_media[0])
 main.mainloop()
