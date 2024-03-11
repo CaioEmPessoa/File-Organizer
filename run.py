@@ -5,7 +5,7 @@ import shutil
 import cv2
 import os
 
-SAFE_MODE = False
+SAFE_MODE = True
 
 class MainWindow(tk.Tk):
     def __init__(self):
@@ -25,6 +25,7 @@ class MainWindow(tk.Tk):
     def search_folders(self):
         #self.root_folders = ["pasta1", "pasta2", "pasta3", "pasta4", "pasta5", "pasta6", "pasta 7"]
         self.root_folders = next(os.walk('.'))[1]
+
         if ".safe_backup" in self.root_folders:
             self.root_folders.remove(".safe_backup")
 
@@ -38,6 +39,16 @@ class MainWindow(tk.Tk):
                     self.folder_btn.grid(row=y+3, column=x)
                     index+=1
 
+    def search_media(self):
+        self.root_files = os.listdir(self.APP_PATH)
+        self.root_media = []
+        for file in self.root_files:
+            file = f"{self.APP_PATH}/{file}"
+
+            if file.endswith(self.IMG_EXT):
+                self.root_media.append((file, "img"))
+            elif file.endswith(self.VID_EXT):
+                self.root_media.append((file, "vid"))
 
     def move_media(self, folder):
         media_path = self.root_media[self.media_index][0]
@@ -51,20 +62,10 @@ class MainWindow(tk.Tk):
         else:
             shutil.move(media_path, folder)
         
-        self.search_folders()
+        self.root_media.remove(self.root_media[self.media_index])
+        self.media_index -=1
         self.update()
         self.next_media()
-
-    def search_media(self):
-        self.root_files = os.listdir(self.APP_PATH)
-        self.root_media = []
-        for file in self.root_files:
-            file = f"{self.APP_PATH}/{file}"
-
-            if file.endswith(self.IMG_EXT):
-                self.root_media.append((file, "img"))
-            elif file.endswith(self.VID_EXT):
-                self.root_media.append((file, "vid"))
     
     def resize_img(self):
         width = self.winfo_width()
@@ -128,10 +129,14 @@ class MainWindow(tk.Tk):
 
     def next_media(self):
         self.media_index += 1
+        if self.media_index > len(self.root_media)-1:
+            self.media_index-=1
         self.show_media(self.root_media[self.media_index])
 
     def previous_media(self):
         self.media_index -= 1
+        if self.media_index < 0:
+            self.media_index+=1
         self.show_media(self.root_media[self.media_index])
 
     def buttons(self):
