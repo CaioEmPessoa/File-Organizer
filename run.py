@@ -1,14 +1,17 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkVideoPlayer import TkinterVideo
+import shutil
 import cv2
 import os
+
+SAFE_MODE = False
 
 class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
-        #self.APP_PATH = os.getcwd()
-        self.APP_PATH = "./tests"
+        self.APP_PATH = os.getcwd()
+        #self.APP_PATH = "./tests"
         self.IMG_EXT = (".png", ".jpg", ".jpeg")
         self.VID_EXT = (".mp4", ".mov", ".gif", ".avi")
 
@@ -27,10 +30,18 @@ class MainWindow(tk.Tk):
         for y in range(9):  # Number of rows
             for x in range(3):  # Number of columns
                 if index < len(self.root_folders):
-                    self.folder_btn = tk.Button(master=self, text=self.root_folders[index], command=lambda s=self.root_folders[index]: print(s))
+                    self.folder_btn = tk.Button(master=self, text=self.root_folders[index], 
+                                                command=lambda dst=self.root_folders[index]: self.move_media(dst))
                     self.folder_btn.grid(row=y+3, column=x)
                     index+=1
 
+
+    def move_media(self, folder):
+        media_path = self.root_media[self.media_index][0]
+        shutil.move(media_path, folder)
+        self.search_folders()
+        self.update()
+        self.next_media()
 
     def search_media(self):
         self.root_files = os.listdir(self.APP_PATH)
