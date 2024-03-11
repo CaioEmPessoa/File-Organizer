@@ -25,6 +25,9 @@ class MainWindow(tk.Tk):
     def search_folders(self):
         #self.root_folders = ["pasta1", "pasta2", "pasta3", "pasta4", "pasta5", "pasta6", "pasta 7"]
         self.root_folders = next(os.walk('.'))[1]
+        if ".safe_backup" in self.root_folders:
+            self.root_folders.remove(".safe_backup")
+
         index = 0
 
         for y in range(9):  # Number of rows
@@ -38,7 +41,16 @@ class MainWindow(tk.Tk):
 
     def move_media(self, folder):
         media_path = self.root_media[self.media_index][0]
-        shutil.move(media_path, folder)
+        if SAFE_MODE == True:
+            if not os.path.exists(self.APP_PATH + "/.safe_backup"):
+                os.mkdir(self.APP_PATH + "/.safe_backup")
+
+            shutil.copy(media_path, folder)
+            shutil.move(media_path, self.APP_PATH + "/.safe_backup")
+
+        else:
+            shutil.move(media_path, folder)
+        
         self.search_folders()
         self.update()
         self.next_media()
