@@ -1,6 +1,6 @@
-distlib==0.3.8
-filelock==3.13.1
-platformdirs==4.2.0
-virtualenv==20.25.0
-virtualenvwrapper-win==1.2.7
-xmltodict==0.12.0
+av==11.0.0
+numpy==1.26.4
+opencv-python==4.9.0.80
+pillow==10.2.0
+Send2Trash==1.8.2
+tkvideoplayer==2.3
