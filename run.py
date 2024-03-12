@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkVideoPlayer import TkinterVideo
+from send2trash import send2trash
 import shutil
 import cv2
 import os
@@ -11,7 +12,7 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.APP_PATH = os.getcwd()
-        #self.APP_PATH = "./tests"
+        #self.APP_PATH = ".\\tests"
         self.IMG_EXT = (".png", ".jpg", ".jpeg")
         self.VID_EXT = (".mp4", ".mov", ".gif", ".avi")
 
@@ -43,24 +44,30 @@ class MainWindow(tk.Tk):
         self.root_files = os.listdir(self.APP_PATH)
         self.root_media = []
         for file in self.root_files:
-            file = f"{self.APP_PATH}/{file}"
+            file = f"{self.APP_PATH}\\{file}"
 
             if file.endswith(self.IMG_EXT):
                 self.root_media.append((file, "img"))
             elif file.endswith(self.VID_EXT):
                 self.root_media.append((file, "vid"))
 
-    def move_media(self, folder):
+    def move_media(self, folder, delete=False):
         media_path = self.root_media[self.media_index][0]
-        if SAFE_MODE == True:
-            if not os.path.exists(self.APP_PATH + "/.safe_backup"):
-                os.mkdir(self.APP_PATH + "/.safe_backup")
 
-            shutil.copy(media_path, folder)
-            shutil.move(media_path, self.APP_PATH + "/.safe_backup")
-
+        if delete==True:
+            print(media_path)
+            send2trash(media_path)
+        
         else:
-            shutil.move(media_path, folder)
+            if SAFE_MODE == True:
+                if not os.path.exists(self.APP_PATH + "\\.safe_backup"):
+                    os.mkdir(self.APP_PATH + "\\.safe_backup")
+
+                shutil.copy(media_path, folder)
+                shutil.move(media_path, self.APP_PATH + "\\.safe_backup")
+
+            else:
+                shutil.move(media_path, folder)
         
         self.root_media.remove(self.root_media[self.media_index])
         self.media_index -=1
@@ -148,13 +155,14 @@ class MainWindow(tk.Tk):
 
         self.play_button = tk.Button(master=self, text="play", command=lambda: self.video_start(), width=10)
 
-        self.del_btn = tk.Button(master=self, text="delete", bg="red", fg="white", width=10)
+        self.del_btn = tk.Button(master=self, text="delete", bg="red", fg="white", command= lambda: self.move_media("trash", delete=True),
+                                 width=10)
 
         self.next_btn = tk.Button(text="next ->", command=lambda: self.next_media(), width=10)
 
 main = MainWindow()
-main.buttons()
 main.search_media()
+main.buttons()
 main.update()
 main.show_media(main.root_media[0])
 main.search_folders()
