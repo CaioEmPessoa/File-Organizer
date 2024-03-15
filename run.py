@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 from tkVideoPlayer import TkinterVideo
 from send2trash import send2trash
@@ -23,12 +24,20 @@ class MainWindow(tk.Tk):
         self.geometry("500x500")
         self.title("File Organizer")
 
+    def display_error(self, msg):
+        self.destroy()
+        messagebox.showerror(title="Error.", message=msg)
+        exit()
+
     def search_folders(self):
         #self.root_folders = ["pasta1", "pasta2", "pasta3", "pasta4", "pasta5", "pasta6", "pasta 7"]
         self.root_folders = next(os.walk('.'))[1]
 
         if ".safe_backup" in self.root_folders:
             self.root_folders.remove(".safe_backup")
+
+        if len(self.root_folders) < 2:
+            self.display_error("Please add at least 2 folders in this directory.")
 
         index = 0
 
@@ -43,6 +52,7 @@ class MainWindow(tk.Tk):
     def search_media(self):
         self.root_files = os.listdir(self.APP_PATH)
         self.root_media = []
+        
         for file in self.root_files:
             file = f"{self.APP_PATH}\\{file}"
 
@@ -50,6 +60,9 @@ class MainWindow(tk.Tk):
                 self.root_media.append((file, "img"))
             elif file.endswith(self.VID_EXT):
                 self.root_media.append((file, "vid"))
+        
+        if len(self.root_media) <= 2:
+            self.display_error("Not enough images in this directory.")
 
     def move_media(self, folder, delete=False):
         media_path = self.root_media[self.media_index][0]
